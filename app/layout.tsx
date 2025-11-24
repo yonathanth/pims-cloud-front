@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.scss';
 
 export const metadata: Metadata = {
-  title: 'PIMS Analytics',
+  title: 'PIMS Analytics Online',
   description: 'Pharmacy Inventory Management System Analytics Dashboard Online',
 };
 
