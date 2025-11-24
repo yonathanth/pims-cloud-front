@@ -33,7 +33,7 @@ npm install
 
 2. Create `.env.local` file:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 3. Run development server:
@@ -41,7 +41,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 npm run dev
 ```
 
-The app will be available at `http://localhost:3001` (or next available port)
+The app will be available at `http://localhost:61001`
 
 ## Project Structure
 
