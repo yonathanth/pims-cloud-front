@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { LoginRequest, LoginResponse, AnalyticsSnapshot, LastUpdated } from '@/types/analytics';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.leyuworkpharmacy.com.et';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:64387';
 
 // Debug: Log the API URL being used
 console.log('🔗 API URL:', API_URL);
@@ -22,7 +22,10 @@ class ApiClient {
       if (typeof window !== 'undefined') {
         const token = localStorage.getItem('auth_token');
         if (token) {
+          console.log('🔑 Adding token to request:', config.url);
           config.headers.Authorization = `Bearer ${token}`;
+        } else {
+          console.log('⚠️ No token found for request:', config.url);
         }
       }
       return config;
@@ -33,9 +36,14 @@ class ApiClient {
       (response) => response,
       (error: AxiosError) => {
         if (error.response?.status === 401 && typeof window !== 'undefined') {
-          // Don't redirect if it's the account update endpoint (wrong current password)
           const url = error.config?.url || '';
-          if (!url.includes('/auth/account')) {
+          console.log('❌ 401 Error on:', url);
+          console.log('❌ Error details:', error.response?.data);
+          
+          // Don't redirect if it's the login endpoint (let the form handle it)
+          // or the account update endpoint (wrong current password)
+          if (!url.includes('/auth/login') && !url.includes('/auth/account')) {
+            console.log('🔄 Token invalid, redirecting to login...');
             localStorage.removeItem('auth_token');
             localStorage.removeItem('auth_user');
             window.location.href = '/login';
