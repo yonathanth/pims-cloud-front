@@ -3,6 +3,9 @@ import { LoginRequest, LoginResponse, AnalyticsSnapshot, LastUpdated } from '@/t
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.leyuworkpharmacy.com.et';
 
+// Debug: Log the API URL being used
+console.log('🔗 API URL:', API_URL);
+
 class ApiClient {
   private client: AxiosInstance;
 

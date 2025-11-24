@@ -19,12 +19,19 @@ export function useAuth() {
 
   const login = async (credentials: LoginRequest) => {
     try {
+      console.log('🔐 Attempting login...');
       const response = await apiClient.login(credentials);
+      console.log('✅ Login successful:', response.user);
+      
       setAuthToken(response.access_token);
       setAuthUser(response.user);
       setUser(response.user);
+      
+      console.log('✅ Token stored, redirecting to dashboard...');
       router.push('/');
     } catch (error: any) {
+      console.error('❌ Login failed:', error);
+      console.error('❌ Error response:', error.response?.data);
       throw new Error(error.response?.data?.message || 'Login failed');
     }
   };
