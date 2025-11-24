@@ -30,8 +30,7 @@ jobs:
             else
               git clone -b master https://github.com/yonathanth/back3-web-app.git .
             fi
-            
-            cd back3-web-app
+          
             npm install --force
             npm run build
 
