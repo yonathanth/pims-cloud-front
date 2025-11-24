@@ -92,6 +92,14 @@ export default function DashboardPage() {
 
   const { analytics } = data;
 
+  // Debug: Log all metric labels
+  console.log('📊 Metrics labels:', analytics.metrics?.map(m => m.label));
+  console.log('📊 Inventory cards labels:', analytics.inventoryCards?.map(m => m.label));
+
+  // Filter out TOTAL STOCK VALUE (case-insensitive)
+  const filterStockValue = (metrics: any[]) => 
+    metrics?.filter(m => !m.label?.toLowerCase().includes('total stock value')) || [];
+
   return (
     <>
       <DashboardHeader onRefresh={refetch} refreshing={loading} />
@@ -109,27 +117,20 @@ export default function DashboardPage() {
             <SelectItem value="monthly" text="Monthly" />
             <SelectItem value="yearly" text="Yearly" />
           </Select>
-          
-          <div className="filter-input">
-            <label className="filter-label">
-              Low stock threshold
-            </label>
-            <NumberInput
-              id="low-stock-threshold"
-              min={0}
-              defaultValue={10}
-            />
-          </div>
         </div>
 
         {/* Key Metrics */}
         <div className="section-spacing">
-          <MetricsCards metrics={analytics.metrics} />
+          <MetricsCards 
+            metrics={filterStockValue(analytics.metrics)} 
+          />
         </div>
 
         {/* Inventory Cards */}
         <div className="section-spacing">
-          <MetricsCards metrics={analytics.inventoryCards} />
+          <MetricsCards 
+            metrics={filterStockValue(analytics.inventoryCards)} 
+          />
         </div>
 
         {/* Tabs */}

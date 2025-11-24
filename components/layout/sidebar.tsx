@@ -21,10 +21,26 @@ import { AccountSettingsModal } from './account-settings-modal';
 
 export function Sidebar() {
   const { user, logout } = useAuth();
-  const [isSideNavExpanded, setIsSideNavExpanded] = useState(false);
+  const [isSideNavExpanded, setIsSideNavExpanded] = useState(true); // Start expanded on desktop
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
 
-  // Close sidebar when clicking outside on desktop
+  // Initialize sidebar state based on screen size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setIsSideNavExpanded(false); // Collapsed on mobile/tablet
+      }
+    };
+
+    // Set initial state
+    handleResize();
+    
+    // Listen for resize
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Close sidebar when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (!isSideNavExpanded) return;
@@ -35,7 +51,10 @@ export function Sidebar() {
       
       // Check if click is outside sidebar and not on menu button
       if (sideNav && !sideNav.contains(target) && menuButton && !menuButton.contains(target)) {
-        setIsSideNavExpanded(false);
+        // Only auto-close on mobile
+        if (window.innerWidth < 1024) {
+          setIsSideNavExpanded(false);
+        }
       }
     };
 
@@ -78,13 +97,19 @@ export function Sidebar() {
         isRail
         expanded={isSideNavExpanded}
         onOverlayClick={() => setIsSideNavExpanded(false)}
+        className={isSideNavExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}
       >
         <SideNavItems>
           <SideNavLink 
             renderIcon={Dashboard} 
             href="/" 
             isActive
-            onClick={() => setIsSideNavExpanded(false)}
+            onClick={() => {
+              // Only close on mobile
+              if (window.innerWidth < 1024) {
+                setIsSideNavExpanded(false);
+              }
+            }}
           >
             Analytics
           </SideNavLink>

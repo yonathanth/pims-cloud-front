@@ -11,11 +11,15 @@ export function useAnalytics() {
 
   const fetchAnalytics = async () => {
     try {
+      console.log('📊 Fetching analytics data...');
       setLoading(true);
       setError(null);
       const result = await apiClient.getAnalytics();
+      console.log('✅ Analytics data received');
       setData(result);
     } catch (err: any) {
+      console.error('❌ Failed to fetch analytics:', err);
+      console.error('❌ Error response:', err.response?.data);
       setError(err.response?.data?.message || 'Failed to fetch analytics');
     } finally {
       setLoading(false);
