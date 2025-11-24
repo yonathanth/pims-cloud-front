@@ -33,7 +33,11 @@ npm install
 
 2. Create `.env.local` file:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
+# For local development
+NEXT_PUBLIC_API_URL=http://localhost:64387
+
+# For production
+# NEXT_PUBLIC_API_URL=http://api.leyuworkpharmacy.com.et
 ```
 
 3. Run development server:
