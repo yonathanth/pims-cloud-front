@@ -3,7 +3,7 @@ import './globals.scss';
 
 export const metadata: Metadata = {
   title: 'PIMS Analytics',
-  description: 'Pharmacy Inventory Management System Analytics Dashboard',
+  description: 'Pharmacy Inventory Management System Analytics Dashboard Online',
 };
 
 export default function RootLayout({
