@@ -21,10 +21,10 @@ import { AccountSettingsModal } from './account-settings-modal';
 
 export function Sidebar() {
   const { user, logout } = useAuth();
-  const [isSideNavExpanded, setIsSideNavExpanded] = useState(true); // Start expanded on desktop
+  const [isSideNavExpanded, setIsSideNavExpanded] = useState(false); // Start collapsed
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
 
-  // Initialize sidebar state based on screen size
+  // Initialize sidebar state - always start collapsed
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1024) {
@@ -51,10 +51,7 @@ export function Sidebar() {
       
       // Check if click is outside sidebar and not on menu button
       if (sideNav && !sideNav.contains(target) && menuButton && !menuButton.contains(target)) {
-        // Only auto-close on mobile
-        if (window.innerWidth < 1024) {
-          setIsSideNavExpanded(false);
-        }
+        setIsSideNavExpanded(false); // Close on all screen sizes
       }
     };
 
@@ -94,7 +91,7 @@ export function Sidebar() {
       </Header>
       <SideNav
         aria-label="Side navigation"
-        isRail
+        isRail={!isSideNavExpanded}
         expanded={isSideNavExpanded}
         onOverlayClick={() => setIsSideNavExpanded(false)}
         className={isSideNavExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}
@@ -104,12 +101,7 @@ export function Sidebar() {
             renderIcon={Dashboard} 
             href="/" 
             isActive
-            onClick={() => {
-              // Only close on mobile
-              if (window.innerWidth < 1024) {
-                setIsSideNavExpanded(false);
-              }
-            }}
+            onClick={() => setIsSideNavExpanded(false)}
           >
             Analytics
           </SideNavLink>

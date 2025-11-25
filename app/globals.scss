@@ -71,33 +71,17 @@ body {
   z-index: 6000;
   transition: width 0.3s ease, transform 0.3s ease;
 
-  // Desktop behavior - toggleable
-  @media (min-width: 1024px) {
-    &.cds--side-nav--rail {
-      width: 3rem; // Collapsed by default (rail mode)
-    }
-
-    &.cds--side-nav--expanded.sidebar-expanded {
-      width: 16rem; // Expanded when toggled
-    }
-
-    &.cds--side-nav--rail:not(.cds--side-nav--expanded) {
-      width: 3rem; // Keep rail mode when collapsed
-    }
+  // Always overlay behavior on all screen sizes
+  &.cds--side-nav--rail {
+    width: 3rem; // Collapsed rail mode
   }
 
-  // Tablet behavior
-  @media (max-width: 1024px) and (min-width: 769px) {
-    &.cds--side-nav--rail {
-      width: 3rem;
-    }
-
-    &.cds--side-nav--expanded {
-      width: 16rem;
-    }
+  &.cds--side-nav--expanded {
+    width: 16rem; // Expanded mode - overlays content
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
   }
 
-  // Mobile behavior - overlay
+  // Mobile behavior - hide when collapsed
   @media (max-width: 768px) {
     &.cds--side-nav--rail:not(.cds--side-nav--expanded) {
       transform: translateX(-100%);
@@ -105,16 +89,24 @@ body {
     }
 
     &.cds--side-nav--expanded {
-      width: 16rem;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.2);
     }
   }
 }
 
-// Ensure the overlay appears on mobile when expanded
+// Ensure the overlay appears when expanded
 .cds--side-nav__overlay {
+  display: block;
+  position: fixed;
+  top: 3rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 5999;
+  
   @media (max-width: 768px) {
-    display: block;
+    background: rgba(0, 0, 0, 0.6);
   }
 }
 
