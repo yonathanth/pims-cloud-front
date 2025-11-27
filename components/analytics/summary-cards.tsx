@@ -8,7 +8,6 @@ interface SummaryCardProps {
   summaryData: {
     label: string;
     value: string | number | Record<string, unknown> | null;
-    trend: 'up' | 'down';
   }[];
 }
 
@@ -107,7 +106,7 @@ const SummaryCards: React.FC<SummaryCardProps> = ({ summaryData }) => {
 
   return (
     <div className="summary-cards-grid">
-      {summaryData.map(({ label, value, trend }, index) => {
+      {summaryData.map(({ label, value }, index) => {
         const { displayLabel, main, percent } = parseValue(label, value);
         const timeFiltered = isTimeFiltered(displayLabel);
         return (
@@ -137,11 +136,6 @@ const SummaryCards: React.FC<SummaryCardProps> = ({ summaryData }) => {
                   <sub className="summary-card-percent">{percent}</sub>
                 ) : null}
               </strong>
-              <span
-                className={`summary-card-trend ${trend === 'up' ? 'trend-up' : 'trend-down'}`}
-              >
-                {trend === 'up' ? '↑' : '↓'}
-              </span>
             </div>
           </div>
         );
