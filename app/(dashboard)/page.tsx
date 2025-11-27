@@ -1,16 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { isAuthenticated } from '@/lib/auth/auth';
 import { DashboardHeader } from '@/components/layout/header';
-import { MetricsCards } from '@/components/analytics/metrics-cards';
+import SummaryCards from '@/components/analytics/summary-cards';
 import { CategoryChart } from '@/components/analytics/category-chart';
 import { MonthlyChart } from '@/components/analytics/monthly-chart';
 import { ProductsTable } from '@/components/analytics/products-table';
-import { SuppliersList } from '@/components/analytics/suppliers-list';
-import { PerformersList } from '@/components/analytics/performers-list';
 import { 
   Tabs, 
   Tab, 
@@ -21,12 +19,19 @@ import {
   Select,
   SelectItem,
   NumberInput,
-  Button,
+  Dropdown,
+  DatePicker,
+  DatePickerInput,
 } from '@carbon/react';
 
 export default function DashboardPage() {
   const router = useRouter();
   const { data, loading, error, refetch } = useAnalytics();
+  
+  // Filter state (matching local analytics page)
+  const [timeFilter, setTimeFilter] = useState<'daily' | 'monthly' | 'yearly' | 'custom' | undefined>(undefined);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+  const [lowStockThreshold, setLowStockThreshold] = useState<number>(10);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && !isAuthenticated()) {
@@ -63,13 +68,6 @@ export default function DashboardPage() {
             >
               <p style={{ fontWeight: 600, margin: 0, fontSize: '1.125rem' }}>Error loading analytics</p>
               <p style={{ fontSize: '0.875rem', margin: '0.75rem 0 0 0', opacity: 0.9 }}>{error}</p>
-              <Button
-                onClick={refetch}
-                kind="primary"
-                style={{ marginTop: '1.5rem' }}
-              >
-                Retry
-              </Button>
             </div>
           </div>
         </div>
@@ -92,57 +90,98 @@ export default function DashboardPage() {
 
   const { analytics } = data;
 
-  // Debug: Log all metric labels
-  console.log('📊 Metrics labels:', analytics.metrics?.map(m => m.label));
-  console.log('📊 Inventory cards labels:', analytics.inventoryCards?.map(m => m.label));
+  // Transform metrics to match SummaryCards format
+  const summaryData = analytics.metrics?.map(metric => ({
+    label: metric.label,
+    value: metric.value,
+    trend: metric.trendUp ? 'up' as const : 'down' as const
+  })) || [];
 
-  // Filter out TOTAL STOCK VALUE (case-insensitive)
-  const filterStockValue = (metrics: any[]) => 
-    metrics?.filter(m => !m.label?.toLowerCase().includes('total stock value')) || [];
+  // Transform inventory cards
+  const inventoryCardsData = analytics.inventoryCards?.map(metric => ({
+    label: metric.label,
+    value: metric.value,
+    trend: metric.trendUp ? 'up' as const : 'down' as const
+  })) || [];
 
   return (
     <>
       <DashboardHeader onRefresh={refetch} refreshing={loading} />
       <div className="dashboard-content">
-        {/* Filters */}
-        <div className="dashboard-filters">
-          <Select
-            id="time-range"
-            labelText="Time range"
-            defaultValue="all"
-            className="filter-select"
-          >
-            <SelectItem value="all" text="All time" />
-            <SelectItem value="daily" text="Daily" />
-            <SelectItem value="monthly" text="Monthly" />
-            <SelectItem value="yearly" text="Yearly" />
-          </Select>
+        {/* Filters - matching local analytics page */}
+        <div className="dashboard-filters" style={{ 
+          display: 'flex', 
+          flexWrap: 'wrap', 
+          gap: '1rem', 
+          marginBottom: '1.5rem',
+          alignItems: 'flex-end'
+        }}>
+          <div style={{ minWidth: '200px', flex: '0 1 auto' }}>
+            <Dropdown
+              id="analytics-time-filter"
+              invalidText="Invalid selection"
+              itemToString={(item) => (item ? item.label : "")}
+              items={[
+                { label: 'All time', value: undefined },
+                { label: 'Daily', value: 'daily' },
+                { label: 'Monthly', value: 'monthly' },
+                { label: 'Yearly', value: 'yearly' },
+                { label: 'Custom range', value: 'custom' },
+              ] as Array<{label: string; value: any}>}
+              selectedItem={timeFilter ? { label: timeFilter.charAt(0).toUpperCase() + timeFilter.slice(1), value: timeFilter } : { label: 'All time', value: undefined }}
+              label={timeFilter ? timeFilter.charAt(0).toUpperCase() + timeFilter.slice(1) : 'All time'}
+              titleText="Time range"
+              type="default"
+              onChange={(e: any) => setTimeFilter(e.selectedItem?.value)}
+            />
+          </div>
+          {timeFilter === 'custom' && (
+            <div style={{ minWidth: '300px', flex: '0 1 auto' }}>
+              <DatePicker datePickerType="range" onChange={(dates: any) => {
+                if (Array.isArray(dates) && dates.length === 2) {
+                  setDateRange([dates[0], dates[1]]);
+                }
+              }}>
+                <DatePickerInput id="analytics-start" labelText="Start date" placeholder="mm/dd/yyyy" />
+                <DatePickerInput id="analytics-end" labelText="End date" placeholder="mm/dd/yyyy" />
+              </DatePicker>
+            </div>
+          )}
+          <div style={{ minWidth: '200px', flex: '0 1 auto' }}>
+            <NumberInput
+              id="low-stock-threshold"
+              label="Low stock threshold"
+              min={0}
+              value={lowStockThreshold}
+              onChange={(e: any) => {
+                const v = Number(e.imaginaryTarget?.value ?? e.target?.value);
+                setLowStockThreshold(Number.isNaN(v) ? 0 : v);
+              }}
+            />
+          </div>
         </div>
 
-        {/* Key Metrics */}
+        {/* Key Metrics - Summary Cards */}
         <div className="section-spacing">
-          <MetricsCards 
-            metrics={filterStockValue(analytics.metrics)} 
-          />
+          <SummaryCards summaryData={summaryData} />
         </div>
 
         {/* Inventory Cards */}
-        <div className="section-spacing">
-          <MetricsCards 
-            metrics={filterStockValue(analytics.inventoryCards)} 
-          />
-        </div>
+        {inventoryCardsData.length > 0 && (
+          <div className="section-spacing">
+            <SummaryCards summaryData={inventoryCardsData} />
+          </div>
+        )}
 
-        {/* Tabs */}
-        <div style={{ marginTop: '1rem' }}>
+        {/* Tabs - Only Inventory and Sales (no Supplier/Employee) */}
+        <div style={{ marginTop: '1.5rem' }}>
           <Tabs>
             <TabList aria-label="Analytics tabs">
               <Tab>Inventory Analytics</Tab>
               <Tab>Sales Analytics</Tab>
-              <Tab>Supplier Analytics</Tab>
-              <Tab>Employee Analytics</Tab>
             </TabList>
             <TabPanels>
+              {/* Inventory Analytics Tab */}
               <TabPanel>
                 <div className="dashboard-grid">
                   <CategoryChart data={analytics.distributionByCategory} />
@@ -169,6 +208,7 @@ export default function DashboardPage() {
                   />
                 </div>
               </TabPanel>
+              {/* Sales Analytics Tab */}
               <TabPanel>
                 <div className="dashboard-grid">
                   <ProductsTable
@@ -179,31 +219,6 @@ export default function DashboardPage() {
                     products={analytics.slowMovingProducts}
                     title="Slow Moving Products"
                   />
-                </div>
-              </TabPanel>
-              <TabPanel>
-                <div className="tab-content">
-                  <SuppliersList suppliers={analytics.topSuppliers} />
-                </div>
-              </TabPanel>
-              <TabPanel>
-                <div className="tab-content">
-                  <div className="employee-header">
-                    <div className="employee-metrics">
-                      <MetricsCards metrics={analytics.metrics.slice(0, 4)} />
-                    </div>
-                    <div className="employee-filter">
-                      <Select
-                        id="sort-employees"
-                        labelText="Sort employees by"
-                        defaultValue="volume"
-                      >
-                        <SelectItem value="volume" text="Volume Sold" />
-                        <SelectItem value="name" text="Name" />
-                      </Select>
-                    </div>
-                  </div>
-                  <PerformersList performers={analytics.topPerformers} />
                 </div>
               </TabPanel>
             </TabPanels>

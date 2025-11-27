@@ -18,7 +18,9 @@ export function ProductsTable({ products = [], title }: ProductsTableProps) {
 
   const rows = products.map((product, index) => ({
     id: index.toString(),
-    product: product.tradeName || product.genericName,
+    product: product.tradeName
+      ? `${product.genericName} (${product.tradeName})`
+      : product.genericName,
     sku: product.sku || '-',
     quantity: product.quantity,
     unitPrice: `$${product.unitPrice.toFixed(2)}`,

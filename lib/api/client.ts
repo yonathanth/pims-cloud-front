@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { LoginRequest, LoginResponse, AnalyticsSnapshot, LastUpdated } from '@/types/analytics';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:64387';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.leyuworkpharmacy.com.et';
 
 // Debug: Log the API URL being used
 console.log('🔗 API URL:', API_URL);
