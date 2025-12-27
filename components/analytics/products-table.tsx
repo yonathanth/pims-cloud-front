@@ -16,15 +16,44 @@ export function ProductsTable({ products = [], title }: ProductsTableProps) {
     { key: 'unitPrice', header: 'Unit Price' },
   ];
 
-  const rows = products.map((product, index) => ({
-    id: index.toString(),
-    product: product.tradeName
-      ? `${product.genericName} (${product.tradeName})`
-      : product.genericName,
-    sku: product.sku || '-',
-    quantity: product.quantity,
-    unitPrice: `$${product.unitPrice.toFixed(2)}`,
-  }));
+  const rows = products.map((product, index) => {
+    // Handle different field names for product name
+    // Support both camelCase (genericName/tradeName) and snake_case (generic_name/trade_name)
+    const p = product as any;
+    let productName = '';
+    
+    // Try camelCase first
+    if (p.genericName) {
+      productName = p.tradeName
+        ? `${p.genericName} (${p.tradeName})`
+        : p.genericName;
+    } 
+    // Try snake_case
+    else if (p.generic_name) {
+      productName = p.trade_name
+        ? `${p.generic_name} (${p.trade_name})`
+        : p.generic_name;
+    }
+    // Fallback to other field names
+    else if (p.drugName) {
+      productName = p.drugName;
+    } else if (p.name) {
+      productName = p.name;
+    } else {
+      productName = 'Unknown Product';
+    }
+
+    // Handle unit price - support both camelCase and snake_case
+    const unitPrice = p.unitPrice ?? p.unit_price ?? 0;
+
+    return {
+      id: index.toString(),
+      product: productName,
+      sku: p.sku || '-',
+      quantity: p.quantity ?? 0,
+      unitPrice: `ETB ${unitPrice.toFixed(2)}`,
+    };
+  });
 
   return (
     <Tile className="table-tile">

@@ -16,24 +16,49 @@ import {
   Dashboard,
   Logout,
   UserAvatar,
+  ChartLine,
+  Renew,
 } from '@carbon/icons-react';
 import { AccountSettingsModal } from './account-settings-modal';
+import { useSync } from '@/hooks/use-sync';
+import { InlineLoading, InlineNotification } from '@carbon/react';
 
 export function Sidebar() {
   const { user, logout } = useAuth();
+  const { sync, loading: syncLoading, error: syncError } = useSync();
   const [isSideNavExpanded, setIsSideNavExpanded] = useState(false); // Start collapsed
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+  const [showSyncNotification, setShowSyncNotification] = useState(false);
 
-  // Initialize sidebar state - always start collapsed
+  const handleSync = async () => {
+    try {
+      await sync(true);
+      setShowSyncNotification(true);
+      setTimeout(() => setShowSyncNotification(false), 5000);
+    } catch (error) {
+      setShowSyncNotification(true);
+      setTimeout(() => setShowSyncNotification(false), 5000);
+    }
+  };
+
+  // Initialize sidebar state - expanded on desktop, collapsed on mobile
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1024) {
-        setIsSideNavExpanded(false); // Collapsed on mobile/tablet
+        setIsSideNavExpanded(false); // Always collapsed on mobile/tablet
+      } else {
+        setIsSideNavExpanded(true); // Expanded on desktop
       }
     };
 
-    // Set initial state
-    handleResize();
+    // Set initial state based on screen size
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 1024) {
+        setIsSideNavExpanded(false); // Hidden on mobile
+      } else {
+        setIsSideNavExpanded(true); // Expanded on desktop
+      }
+    }
     
     // Listen for resize
     window.addEventListener('resize', handleResize);
@@ -70,9 +95,17 @@ export function Sidebar() {
           isActive={isSideNavExpanded}
         />
         <HeaderName href="/" prefix="">
-          PIMS Admin Dashboard
+          Dashboard
         </HeaderName>
         <HeaderGlobalBar>
+          <HeaderGlobalAction
+            aria-label="Sync Now"
+            onClick={handleSync}
+            tooltipAlignment="end"
+            disabled={syncLoading}
+          >
+            <Renew size={20} />
+          </HeaderGlobalAction>
           <HeaderGlobalAction
             aria-label="Account Settings"
             onClick={() => setIsAccountModalOpen(true)}
@@ -91,19 +124,26 @@ export function Sidebar() {
       </Header>
       <SideNav
         aria-label="Side navigation"
-        isRail={!isSideNavExpanded}
+        isRail={false} /* Always show full sidebar when expanded */
         expanded={isSideNavExpanded}
         onOverlayClick={() => setIsSideNavExpanded(false)}
         className={isSideNavExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}
+        isFixedNav={true}
       >
         <SideNavItems>
           <SideNavLink 
-            renderIcon={Dashboard} 
-            href="/" 
-            isActive
+            renderIcon={ChartLine} 
+            href="/analytics" 
             onClick={() => setIsSideNavExpanded(false)}
           >
             Analytics
+          </SideNavLink>
+          <SideNavLink 
+            renderIcon={Dashboard} 
+            href="/sales" 
+            onClick={() => setIsSideNavExpanded(false)}
+          >
+            Sales
           </SideNavLink>
         </SideNavItems>
       </SideNav>
@@ -113,6 +153,25 @@ export function Sidebar() {
         onClose={() => setIsAccountModalOpen(false)}
         currentUser={user}
       />
+      {showSyncNotification && (
+        <div style={{ position: 'fixed', top: '4rem', right: '1rem', zIndex: 9999 }}>
+          {syncError ? (
+            <InlineNotification
+              kind="error"
+              title="Sync Failed"
+              subtitle={syncError}
+              onClose={() => setShowSyncNotification(false)}
+            />
+          ) : (
+            <InlineNotification
+              kind="success"
+              title="Sync Successful"
+              subtitle="Data has been synced successfully"
+              onClose={() => setShowSyncNotification(false)}
+            />
+          )}
+        </div>
+      )}
     </>
   );
 }

@@ -27,8 +27,8 @@ export function useAuth() {
       setAuthUser(response.user);
       setUser(response.user);
       
-      console.log('✅ Token stored, redirecting to dashboard...');
-      router.push('/');
+      console.log('✅ Token stored, redirecting to analytics...');
+      router.push('/analytics');
     } catch (error: any) {
       console.error('❌ Login failed:', error);
       console.error('❌ Error response:', error.response?.data);

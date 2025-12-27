@@ -1,10 +1,16 @@
 // Utility functions for the application
 
 export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('en-ET', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'ETB',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(value);
+}
+
+export function formatCurrencySimple(value: number): string {
+  return `ETB ${value.toFixed(2)}`;
 }
 
 export function formatNumber(value: number): string {

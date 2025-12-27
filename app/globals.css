@@ -1,0 +1,364 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    @apply bg-white text-gray-900 antialiased;
+    font-family: var(--font-montserrat), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gray-900 text-white px-8 py-3 font-medium hover:bg-gray-800 transition-colors duration-200 border border-gray-900;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-gray-900 px-8 py-3 font-medium hover:bg-primary-50 transition-colors duration-200 border border-gray-900;
+  }
+  
+  .btn-outline {
+    @apply border border-gray-900 text-gray-900 px-8 py-3 font-medium hover:bg-primary-50 transition-colors duration-200 bg-white;
+  }
+  
+  .section-padding {
+    @apply py-20 px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-custom {
+    @apply max-w-6xl mx-auto;
+  }
+
+  /* Dashboard Layout Styles */
+  .dashboard-layout {
+    @apply min-h-screen;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .dashboard-main {
+    @apply flex-1;
+    margin: 0;
+    padding: 0;
+    transition: margin-left 0.3s ease;
+    padding-top: 3rem; /* Account for fixed header */
+    min-height: calc(100vh - 3rem);
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
+
+  .dashboard-container {
+    @apply max-w-7xl mx-auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 1.5rem; /* Consistent 24px padding */
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+
+  .dashboard-header-section {
+    @apply flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4;
+    margin-bottom: 1.5rem; /* Consistent 24px margin */
+  }
+
+  .page-title {
+    @apply text-3xl font-semibold text-gray-900;
+    margin-bottom: 0.5rem; /* Consistent 8px margin */
+  }
+
+  .page-subtitle {
+    @apply text-sm text-gray-600;
+    margin-bottom: 0.5rem; /* Consistent 8px margin */
+  }
+
+  .last-updated {
+    @apply text-xs text-gray-500;
+  }
+
+  .period-filter-container {
+    @apply flex items-center gap-2;
+  }
+
+  /* Metrics Cards Container */
+  .metrics-cards-container {
+    margin-bottom: 1.5rem; /* Consistent 24px margin */
+  }
+
+  .metrics-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+    gap: 1rem; /* Consistent 16px gap */
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .metric-card {
+    @apply bg-white border border-gray-200 rounded shadow-sm overflow-hidden;
+  }
+
+  .metric-card-content {
+    @apply flex items-start justify-between;
+    padding: 1rem; /* Consistent 16px padding */
+  }
+
+  .metric-info {
+    @apply flex-1;
+  }
+
+  .metric-label {
+    @apply text-sm font-medium text-gray-600 mb-1;
+  }
+
+  .metric-value-container {
+    @apply flex items-baseline gap-2;
+  }
+
+  .metric-value {
+    @apply text-2xl font-semibold text-gray-900;
+  }
+
+  .metric-percentage {
+    @apply text-sm text-gray-600;
+  }
+
+  .metric-trend-indicator {
+    @apply w-3 h-3 rounded-full flex-shrink-0 mt-1;
+  }
+
+  .metric-trend-indicator[data-trend="up"] {
+    @apply bg-green-500;
+  }
+
+  .metric-trend-indicator[data-trend="down"] {
+    @apply bg-red-500;
+  }
+
+  .section-title {
+    @apply text-xl font-semibold text-gray-900;
+    margin-bottom: 1rem; /* Consistent 16px margin */
+  }
+
+  /* Summary Cards Grid */
+  .summary-cards-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+    gap: 1rem; /* Consistent 16px gap */
+    margin: 0 0 1.5rem 0; /* Consistent 24px margin bottom only */
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .summary-card {
+    @apply bg-white border border-gray-200 rounded shadow-sm;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem; /* Consistent 16px padding */
+  }
+
+  .summary-card-header {
+    @apply flex items-center justify-between;
+    margin-bottom: 0.5rem; /* Consistent 8px margin */
+  }
+
+  .summary-card-label {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  .summary-card-body {
+    @apply flex-1;
+  }
+
+  .summary-card-value {
+    @apply text-2xl font-semibold text-gray-900;
+    display: block;
+  }
+
+  .summary-card-percent {
+    @apply text-sm text-gray-600 ml-1;
+  }
+
+  .time-filter-icon {
+    @apply text-gray-400;
+  }
+
+  /* Charts Grid */
+  .charts-grid {
+    @apply grid grid-cols-1 lg:grid-cols-2;
+    gap: 1.5rem; /* Consistent 24px gap */
+    margin-bottom: 1.5rem; /* Consistent 24px margin */
+  }
+
+  /* Products Table */
+  .table-tile {
+    @apply bg-white border border-gray-200 rounded shadow-sm;
+    margin-bottom: 1.5rem; /* Consistent 24px margin */
+    padding: 0; /* Remove default padding, handle internally */
+  }
+
+  .table-title {
+    @apply text-lg font-semibold text-gray-900 border-b border-gray-200;
+    padding: 1rem; /* Consistent 16px padding */
+    margin: 0;
+  }
+
+  .responsive-table-container {
+    padding: 0; /* No extra padding, table handles its own */
+  }
+
+  .empty-state-text {
+    @apply text-gray-500 text-center;
+    padding: 2rem 1rem; /* Consistent padding for empty state */
+  }
+
+  .products-table-container {
+    @apply bg-white border border-gray-200 rounded shadow-sm;
+    margin-bottom: 1.5rem; /* Consistent 24px margin */
+  }
+
+  .products-table-title {
+    @apply text-lg font-semibold text-gray-900 border-b border-gray-200;
+    padding: 1rem; /* Consistent 16px padding */
+  }
+
+  /* Analytics Tabs */
+  .analytics-tab-content {
+    padding: 0; /* No extra padding, let components handle their own */
+  }
+
+  .charts-container {
+    @apply grid grid-cols-1 lg:grid-cols-2;
+    gap: 1.5rem; /* Consistent 24px gap */
+    margin-bottom: 1.5rem; /* Consistent 24px margin */
+  }
+
+  /* Chart Tiles */
+  .chart-tile {
+    @apply bg-white border border-gray-200 rounded shadow-sm;
+    padding: 1rem; /* Consistent 16px padding */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-title {
+    @apply text-lg font-semibold text-gray-900;
+    margin-bottom: 1rem; /* Consistent 16px margin */
+  }
+
+  .chart-container {
+    flex: 1;
+    min-height: 300px;
+  }
+
+  /* Fix header positioning - Carbon Design System header is already fixed */
+  .cds--header {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    width: 100%;
+  }
+
+  /* Adjust sidebar positioning */
+  .cds--side-nav {
+    position: fixed !important;
+    top: 3rem; /* Below header */
+    left: 0;
+    height: calc(100vh - 3rem);
+    z-index: 999;
+  }
+
+  /* Hide sidebar completely on mobile - only show when expanded via nav icon */
+  @media (max-width: 1023px) {
+    .cds--side-nav {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      width: 16rem; /* Full sidebar width on mobile when shown */
+    }
+
+    .cds--side-nav.sidebar-expanded {
+      transform: translateX(0);
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15); /* Add shadow when visible */
+    }
+
+    .cds--side-nav.sidebar-collapsed {
+      transform: translateX(-100%);
+    }
+
+    /* Sidebar overlay on mobile */
+    .cds--side-nav__overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+    }
+
+    .dashboard-main {
+      margin-left: 0 !important; /* No margin on mobile */
+      width: 100% !important;
+    }
+  }
+
+  /* Desktop: Adjust main content when sidebar is expanded/collapsed */
+  @media (min-width: 1024px) {
+    .cds--side-nav {
+      transform: none; /* Reset mobile transform */
+    }
+
+    .dashboard-layout:has(.cds--side-nav.sidebar-expanded) .dashboard-main {
+      margin-left: 16rem; /* Sidebar width when expanded */
+      width: calc(100% - 16rem); /* Adjust width to account for sidebar */
+      max-width: calc(100% - 16rem); /* Prevent overflow */
+    }
+
+    .dashboard-layout:has(.cds--side-nav.sidebar-collapsed) .dashboard-main {
+      margin-left: 0; /* No margin when collapsed on desktop */
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Fallback for browsers that don't support :has() */
+    @supports not selector(:has(*)) {
+      .dashboard-layout .cds--side-nav.sidebar-expanded ~ .dashboard-main,
+      .dashboard-layout .cds--side-nav.sidebar-expanded + .dashboard-main {
+        margin-left: 16rem;
+        width: calc(100% - 16rem);
+        max-width: calc(100% - 16rem);
+      }
+      
+      .dashboard-layout .cds--side-nav.sidebar-collapsed ~ .dashboard-main,
+      .dashboard-layout .cds--side-nav.sidebar-collapsed + .dashboard-main {
+        margin-left: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+}
+

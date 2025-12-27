@@ -1,7 +1,6 @@
 'use client';
 
 import { Sidebar } from '@/components/layout/sidebar';
-import { Content } from '@carbon/react';
 
 export default function DashboardLayout({
   children,
@@ -9,11 +8,12 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="dashboard-layout">
       <Sidebar />
-      <Content className="dashboard-layout-content">
+      <main className="dashboard-main">
         {children}
-      </Content>
-    </>
+      </main>
+    </div>
   );
 }
+

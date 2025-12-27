@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { apiClient } from '@/lib/api/client';
 import { formatRelativeTime } from '@/lib/utils';
-import { Button, InlineLoading } from '@carbon/react';
+import { Button, InlineLoading, InlineNotification } from '@carbon/react';
 import { Renew } from '@carbon/icons-react';
+import { useSync } from '@/hooks/use-sync';
 
 interface HeaderProps {
   onRefresh?: () => void;
@@ -12,42 +12,46 @@ interface HeaderProps {
 }
 
 export function DashboardHeader({ onRefresh, refreshing }: HeaderProps) {
-  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const { sync, loading: syncLoading, error: syncError, lastSync } = useSync();
+  const [showNotification, setShowNotification] = useState(false);
 
-  useEffect(() => {
-    const fetchLastUpdated = async () => {
-      try {
-        const data = await apiClient.getLastUpdated();
-        setLastUpdated(data.lastUpdatedAt || null);
-      } catch (error) {
-        console.error('Failed to fetch last updated:', error);
-      }
-    };
-
-    fetchLastUpdated();
-    const interval = setInterval(fetchLastUpdated, 60000);
-    return () => clearInterval(interval);
-  }, []);
+  const handleSync = async () => {
+    try {
+      await sync(true);
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 5000);
+    } catch (error) {
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 5000);
+    }
+  };
 
   return (
     <div className="dashboard-header">
       <div className="header-content">
         <div className="header-info">
-          <h1 className="page-title">
-            Analytics
-          </h1>
-          <p className="page-subtitle">
-            Track sales, inventory, and other key insights
-          </p>
-          {lastUpdated && (
+          {lastSync && lastSync.results && lastSync.results.length > 0 && (
             <p className="last-updated">
-              Last updated: {formatRelativeTime(lastUpdated)}
+              Last sync: {formatRelativeTime(lastSync.results[0].message || '')}
             </p>
           )}
         </div>
-        {onRefresh && (
-          <div className="header-actions">
-            {refreshing ? (
+        <div className="header-actions" style={{ display: 'flex', gap: '0.5rem' }}>
+          {syncLoading ? (
+            <InlineLoading description="Syncing..." />
+          ) : (
+            <Button
+              kind="primary"
+              size="md"
+              onClick={handleSync}
+              renderIcon={Renew}
+              className="sync-button"
+            >
+              Sync Now
+            </Button>
+          )}
+          {onRefresh && (
+            refreshing ? (
               <InlineLoading description="Refreshing..." />
             ) : (
               <Button
@@ -59,10 +63,29 @@ export function DashboardHeader({ onRefresh, refreshing }: HeaderProps) {
               >
                 Refresh
               </Button>
-            )}
-          </div>
-        )}
+            )
+          )}
+        </div>
       </div>
+      {showNotification && (
+        <div style={{ marginTop: '1rem' }}>
+          {syncError ? (
+            <InlineNotification
+              kind="error"
+              title="Sync Failed"
+              subtitle={syncError}
+              onClose={() => setShowNotification(false)}
+            />
+          ) : (
+            <InlineNotification
+              kind="success"
+              title="Sync Successful"
+              subtitle="Data has been synced successfully"
+              onClose={() => setShowNotification(false)}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }
