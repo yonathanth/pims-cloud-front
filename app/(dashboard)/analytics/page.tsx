@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { PeriodFilter, Period } from '@/components/analytics/period-filter';
 import { AnalyticsTabs } from '@/components/analytics/analytics-tabs';
 import { getAnalyticsByPeriod, Period as PeriodType } from '@/lib/api/analytics';
-import { formatRelativeTime } from '@/lib/utils';
 import { InlineLoading, NotificationActionButton, InlineNotification } from '@carbon/react';
 
 // Get pharmacy ID from environment or use default
@@ -16,7 +15,6 @@ export default function AnalyticsPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   const fetchAnalytics = async (selectedPeriod: Period) => {
     try {
@@ -28,7 +26,6 @@ export default function AnalyticsPage() {
       const resultAny = result as any;
       const analyticsData = result.analytics || resultAny.snapshot || result;
       setData(analyticsData);
-      setLastUpdated(result.uploadedAt);
     } catch (err: any) {
       console.error('Failed to fetch analytics:', err);
       setError(err.response?.data?.message || err.message || 'Failed to fetch analytics data');
@@ -55,11 +52,6 @@ export default function AnalyticsPage() {
             <div>
               <h1 className="page-title">Analytics</h1>
               <p className="page-subtitle">Track sales, inventory, and other key insights</p>
-              {lastUpdated && (
-                <p className="last-updated">
-                  Last updated: {formatRelativeTime(lastUpdated)}
-                </p>
-              )}
             </div>
             <div className="period-filter-container">
               <PeriodFilter value={period} onChange={setPeriod} />

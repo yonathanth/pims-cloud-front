@@ -19,20 +19,20 @@ export const metadata: Metadata = {
   authors: [{ name: 'Leyuwork Pharmacy' }],
   creator: 'Leyuwork Pharmacy',
   publisher: 'Leyuwork Pharmacy',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:9000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://leyuworkpharmacy.com.et'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: '/',
+    url: 'https://leyuworkpharmacy.com.et',
     siteName: 'Leyuwork Pharmacy',
     title: 'Leyuwork Pharmacy - Your Trusted Neighborhood Pharmacy',
     description: 'Licensed pharmacy in Hossana, Ethiopia. Providing prescription drugs, OTC medicines, medical supplies, and health advice.',
     images: [
       {
-        url: '/pharma.jpg',
+        url: 'https://leyuworkpharmacy.com.et/pharma.jpg',
         width: 1200,
         height: 630,
         alt: 'Leyuwork Pharmacy',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Leyuwork Pharmacy - Your Trusted Neighborhood Pharmacy',
     description: 'Licensed pharmacy in Hossana, Ethiopia. Providing prescription drugs, OTC medicines, medical supplies, and health advice.',
-    images: ['/pharma.jpg'],
+    images: ['https://leyuworkpharmacy.com.et/pharma.jpg'],
   },
   robots: {
     index: true,

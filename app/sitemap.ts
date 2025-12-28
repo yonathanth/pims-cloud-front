@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:9000';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://leyuworkpharmacy.com.et';
 
   // Public pages that should be indexed
   const routes = [
