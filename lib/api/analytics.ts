@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.leyuworkpharmacy.com.et';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.leyuworkpharmacy.com.et/api';
 
 export type Period = 'daily' | 'weekly' | 'monthly' | 'yearly';
 
