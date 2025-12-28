@@ -42,7 +42,7 @@ class ApiClient {
           
           // Don't redirect if it's the login endpoint (let the form handle it)
           // or the account update endpoint (wrong current password)
-          if (!url.includes('/auth/login') && !url.includes('/auth/account')) {
+          if (!url.includes('/api/auth/login') && !url.includes('/api/auth/account')) {
             console.log('🔄 Token invalid, redirecting to login...');
             localStorage.removeItem('auth_token');
             localStorage.removeItem('auth_user');
@@ -55,7 +55,7 @@ class ApiClient {
   }
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
-    const response = await this.client.post<LoginResponse>('/auth/login', credentials);
+    const response = await this.client.post<LoginResponse>('/api/auth/login', credentials);
     return response.data;
   }
 
@@ -65,7 +65,7 @@ class ApiClient {
     currentPassword?: string;
     newPassword?: string;
   }): Promise<{ user: { id: number; username: string; fullName?: string } }> {
-    const response = await this.client.patch('/auth/account', data);
+    const response = await this.client.patch('/api/auth/account', data);
     return response.data;
   }
 
