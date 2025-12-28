@@ -142,7 +142,7 @@ export default function HomePage() {
         <section className="section-padding bg-white border-t border-gray-200">
           <div className="container-custom text-center">
             <h2 className="text-3xl md:text-4xl font-light mb-6 tracking-tight text-gray-900">
-              Need Help? We're Here for You
+              Need Help? We&apos;re Here for You
             </h2>
             <p className="text-lg mb-12 text-gray-600 font-light">
               Visit us today or contact us for any health-related questions.

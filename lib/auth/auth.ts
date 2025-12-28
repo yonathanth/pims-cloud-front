@@ -1,7 +1,9 @@
 export function setAuthToken(token: string): void {
   if (typeof window !== 'undefined') {
-    console.log('💾 Storing token in localStorage');
+    console.log('💾 Storing token in localStorage and cookie');
     localStorage.setItem('auth_token', token);
+    // Also store in cookie for middleware access
+    document.cookie = `auth_token=${token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`; // 7 days
     // Verify it was stored
     const stored = localStorage.getItem('auth_token');
     console.log('✅ Token stored:', stored ? 'Yes' : 'No');
@@ -19,9 +21,11 @@ export function getAuthToken(): string | null {
 
 export function removeAuthToken(): void {
   if (typeof window !== 'undefined') {
-    console.log('🗑️ Removing auth tokens from localStorage');
+    console.log('🗑️ Removing auth tokens from localStorage and cookie');
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
+    // Also remove cookie
+    document.cookie = 'auth_token=; path=/; max-age=0; SameSite=Lax';
   }
 }
 

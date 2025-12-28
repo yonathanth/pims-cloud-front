@@ -104,8 +104,8 @@ export default function AboutPage() {
             </p>
             
             <p className="text-gray-600 leading-relaxed mt-6">
-              If you have any questions about our services or need health advice, please don't 
-              hesitate to visit us or contact us. We're here to help!
+              If you have any questions about our services or need health advice, please don&apos;t 
+              hesitate to visit us or contact us. We&apos;re here to help!
             </p>
           </div>
         </section>
@@ -117,7 +117,7 @@ export default function AboutPage() {
               Visit Us Today
             </h2>
             <p className="text-sm text-gray-600 mb-8">
-              We'd love to meet you and help with your healthcare needs.
+              We&apos;d love to meet you and help with your healthcare needs.
             </p>
             <a
               href="/contact"

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { DashboardHeader } from '@/components/layout/header';
 import { PeriodFilter, Period } from '@/components/analytics/period-filter';
 import { AnalyticsTabs } from '@/components/analytics/analytics-tabs';
 import { getAnalyticsByPeriod, Period as PeriodType } from '@/lib/api/analytics';
@@ -26,7 +25,8 @@ export default function AnalyticsPage() {
       const result = await getAnalyticsByPeriod(PHARMACY_ID, selectedPeriod as PeriodType);
       console.log('Analytics API response:', result);
       // Handle both 'analytics' and 'snapshot' field names for compatibility
-      const analyticsData = result.analytics || result.snapshot || result;
+      const resultAny = result as any;
+      const analyticsData = result.analytics || resultAny.snapshot || result;
       setData(analyticsData);
       setLastUpdated(result.uploadedAt);
     } catch (err: any) {
@@ -67,16 +67,18 @@ export default function AnalyticsPage() {
           </div>
 
           {error && (
-            <InlineNotification
-              kind="error"
-              title="Error"
-              subtitle={error}
-              actions={
+            <div style={{ marginBottom: '1rem' }}>
+              <InlineNotification
+                kind="error"
+                title="Error"
+                subtitle={error}
+              />
+              <div style={{ marginTop: '0.5rem' }}>
                 <NotificationActionButton onClick={() => fetchAnalytics(period)}>
                   Retry
                 </NotificationActionButton>
-              }
-            />
+              </div>
+            </div>
           )}
 
           {data && (

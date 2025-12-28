@@ -17,29 +17,13 @@ import {
   Logout,
   UserAvatar,
   ChartLine,
-  Renew,
 } from '@carbon/icons-react';
 import { AccountSettingsModal } from './account-settings-modal';
-import { useSync } from '@/hooks/use-sync';
-import { InlineLoading, InlineNotification } from '@carbon/react';
 
 export function Sidebar() {
   const { user, logout } = useAuth();
-  const { sync, loading: syncLoading, error: syncError } = useSync();
   const [isSideNavExpanded, setIsSideNavExpanded] = useState(false); // Start collapsed
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
-  const [showSyncNotification, setShowSyncNotification] = useState(false);
-
-  const handleSync = async () => {
-    try {
-      await sync(true);
-      setShowSyncNotification(true);
-      setTimeout(() => setShowSyncNotification(false), 5000);
-    } catch (error) {
-      setShowSyncNotification(true);
-      setTimeout(() => setShowSyncNotification(false), 5000);
-    }
-  };
 
   // Initialize sidebar state - expanded on desktop, collapsed on mobile
   useEffect(() => {
@@ -99,14 +83,6 @@ export function Sidebar() {
         </HeaderName>
         <HeaderGlobalBar>
           <HeaderGlobalAction
-            aria-label="Sync Now"
-            onClick={handleSync}
-            tooltipAlignment="end"
-            disabled={syncLoading}
-          >
-            <Renew size={20} />
-          </HeaderGlobalAction>
-          <HeaderGlobalAction
             aria-label="Account Settings"
             onClick={() => setIsAccountModalOpen(true)}
             tooltipAlignment="end"
@@ -153,25 +129,6 @@ export function Sidebar() {
         onClose={() => setIsAccountModalOpen(false)}
         currentUser={user}
       />
-      {showSyncNotification && (
-        <div style={{ position: 'fixed', top: '4rem', right: '1rem', zIndex: 9999 }}>
-          {syncError ? (
-            <InlineNotification
-              kind="error"
-              title="Sync Failed"
-              subtitle={syncError}
-              onClose={() => setShowSyncNotification(false)}
-            />
-          ) : (
-            <InlineNotification
-              kind="success"
-              title="Sync Successful"
-              subtitle="Data has been synced successfully"
-              onClose={() => setShowSyncNotification(false)}
-            />
-          )}
-        </div>
-      )}
     </>
   );
 }

@@ -28,7 +28,7 @@ export default function ContactPage() {
               Contact Us
             </h1>
             <p className="text-lg md:text-2xl text-gray-700 text-center max-w-2xl mx-auto font-normal drop-shadow-sm">
-              Visit us or get in touch - we're here to help
+              Visit us or get in touch - we&apos;re here to help
             </p>
           </div>
         </section>
@@ -158,7 +158,7 @@ export default function ContactPage() {
         <section className="section-padding bg-white border-y border-gray-200">
           <div className="container-custom max-w-3xl">
             <h2 className="text-2xl font-light text-gray-900 text-center mb-8 tracking-tight">
-              We're Here to Help
+              We&apos;re Here to Help
             </h2>
             <div className="bg-white border-l-4 border-primary-600 p-8 border border-gray-200">
               <p className="text-sm text-gray-600 leading-relaxed mb-4">

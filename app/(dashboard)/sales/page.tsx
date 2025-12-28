@@ -81,16 +81,18 @@ export default function SalesPage() {
           </div>
 
           {error && (
-            <InlineNotification
-              kind="error"
-              title="Error"
-              subtitle={error}
-              actions={
+            <div style={{ marginBottom: '1rem' }}>
+              <InlineNotification
+                kind="error"
+                title="Error"
+                subtitle={error}
+              />
+              <div style={{ marginTop: '0.5rem' }}>
                 <NotificationActionButton onClick={() => fetchSales(period)}>
                   Retry
                 </NotificationActionButton>
-              }
-            />
+              </div>
+            </div>
           )}
 
           {data && (
