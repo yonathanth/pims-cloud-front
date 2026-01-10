@@ -104,13 +104,13 @@ export default function ServicesPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="tel:+251"
+                href="tel:+251911662934"
                 className="bg-white text-gray-900 px-8 py-3 font-medium hover:bg-gray-100 transition-colors inline-flex items-center justify-center border border-white"
               >
                 Call Now
               </a>
               <a
-                href="https://wa.me/251"
+                href="https://wa.me/251911662934"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="border border-white text-white px-8 py-3 font-medium hover:bg-white hover:text-gray-900 transition-colors inline-flex items-center justify-center"

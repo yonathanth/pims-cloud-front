@@ -2,9 +2,7 @@ import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
 
 export default function ContactPage() {
-  // Google Maps embed URL for Hossana, Ethiopia
-  // You'll need to replace this with the actual location coordinates
-  const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.123456789!2d37.85!3d7.55!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMzMnMDAuMCBOIDM3wrA1MCcwMC4wIEU!5e0!3m2!1sen!2set!4v1234567890123!5m2!1sen!2set";
+  const mapDirectionsUrl = "https://goo.gl/maps/VxbhWkrEUayvswZL7";
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -56,12 +54,32 @@ export default function ContactPage() {
                   {/* Phone */}
                   <div>
                     <h3 className="text-sm font-medium text-gray-900 mb-2 uppercase tracking-wider">Phone</h3>
-                    <a
-                      href="tel:+251"
-                      className="text-gray-600 hover:text-primary-600 transition-colors"
-                    >
-                      +251 XXX XXX XXX
-                    </a>
+                    <div className="space-y-2">
+                      <div>
+                        <a
+                          href="tel:+251911662934"
+                          className="text-gray-600 hover:text-primary-600 transition-colors block"
+                        >
+                          +251 911 662 934
+                        </a>
+                      </div>
+                      <div>
+                        <a
+                          href="tel:+25178819400"
+                          className="text-gray-600 hover:text-primary-600 transition-colors block"
+                        >
+                          +251 788 194 00
+                        </a>
+                      </div>
+                      <div>
+                        <a
+                          href="tel:+251912645392"
+                          className="text-gray-600 hover:text-primary-600 transition-colors block"
+                        >
+                          +251 912 645 392
+                        </a>
+                      </div>
+                    </div>
                     <p className="text-sm text-gray-500 mt-1">
                       Call us during business hours
                     </p>
@@ -71,12 +89,12 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-sm font-medium text-gray-900 mb-2 uppercase tracking-wider">WhatsApp</h3>
                     <a
-                      href="https://wa.me/251"
+                      href="https://wa.me/251911662934"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-600 hover:text-primary-600 transition-colors"
                     >
-                      Message us on WhatsApp
+                      Message us on WhatsApp (+251 911 662 934)
                     </a>
                     <p className="text-sm text-gray-500 mt-1">
                       Available for quick inquiries
@@ -106,13 +124,13 @@ export default function ContactPage() {
                 {/* Quick Action Buttons */}
                 <div className="mt-12 space-y-3">
                   <a
-                    href="tel:+251"
+                    href="tel:+251911662934"
                     className="btn-primary w-full text-center inline-block"
                   >
-                    Call Now
+                    Call Now (+251 911 662 934)
                   </a>
                   <a
-                    href="https://wa.me/251"
+                    href="https://wa.me/251911662934"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-secondary w-full text-center inline-block"
@@ -120,7 +138,7 @@ export default function ContactPage() {
                     WhatsApp Us
                   </a>
                   <a
-                    href="https://www.google.com/maps/search/?api=1&query=Hossana+Ethiopia"
+                    href={mapDirectionsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-outline w-full text-center inline-block"
@@ -133,21 +151,34 @@ export default function ContactPage() {
               {/* Map */}
               <div>
                 <h2 className="text-2xl font-light text-gray-900 mb-6 tracking-tight">Find Us</h2>
-                <div className="border border-gray-200">
-                  <iframe
-                    src={mapEmbedUrl}
-                    width="100%"
-                    height="500"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="w-full"
-                    title="Leyuwork Pharmacy Location"
-                  ></iframe>
+                <div className="border border-gray-200 overflow-hidden rounded">
+                  <a
+                    href={mapDirectionsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full h-[500px] bg-gray-100 relative group"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center">
+                      <div className="text-center p-8">
+                        <div className="text-6xl mb-4">📍</div>
+                        <h3 className="text-xl font-medium text-gray-900 mb-2">Leyuwork Pharmacy</h3>
+                        <p className="text-gray-600 mb-4">Hossana, Ethiopia</p>
+                        <div className="bg-white px-6 py-3 rounded-md shadow-md inline-block group-hover:shadow-lg transition-shadow">
+                          <span className="text-primary-600 font-medium">Click to view on Google Maps →</span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
                 </div>
                 <p className="text-xs text-gray-500 mt-4 text-center">
-                  Click on the map to open in Google Maps for detailed directions
+                  <a
+                    href={mapDirectionsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary-600 hover:text-primary-700 underline"
+                  >
+                    Open in Google Maps for detailed directions
+                  </a>
                 </p>
               </div>
             </div>

@@ -54,12 +54,22 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-gray-300">
               <li>Hossana, Ethiopia</li>
               <li>
-                <a href="tel:+251" className="hover:text-white transition-colors duration-200 inline-block">
-                  Call Us
+                <a href="tel:+251911662934" className="hover:text-white transition-colors duration-200 inline-block">
+                  +251 911 662 934
                 </a>
               </li>
               <li>
-                <a href="https://wa.me/251" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-200 inline-block">
+                <a href="tel:+25178819400" className="hover:text-white transition-colors duration-200 inline-block">
+                  +251 788 194 00
+                </a>
+              </li>
+              <li>
+                <a href="tel:+251912645392" className="hover:text-white transition-colors duration-200 inline-block">
+                  +251 912 645 392
+                </a>
+              </li>
+              <li>
+                <a href="https://wa.me/251911662934" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-200 inline-block">
                   WhatsApp Us
                 </a>
               </li>

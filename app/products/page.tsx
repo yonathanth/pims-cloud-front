@@ -108,13 +108,13 @@ export default function ProductsPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="tel:+251"
+                href="tel:+251911662934"
                 className="btn-primary inline-flex items-center justify-center"
               >
                 Call to Check Availability
               </a>
               <a
-                href="https://wa.me/251"
+                href="https://wa.me/251911662934"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary inline-flex items-center justify-center"

@@ -32,13 +32,13 @@ export default function HomePage() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
                 <a
-                  href="tel:+251"
+                  href="tel:+251911662934"
                   className="btn-primary inline-flex items-center justify-center w-auto sm:w-auto mx-auto sm:mx-0"
                 >
                   Call Now
                 </a>
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=Hossana+Ethiopia"
+                  href="https://goo.gl/maps/VxbhWkrEUayvswZL7"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-secondary inline-flex items-center justify-center w-auto sm:w-auto mx-auto sm:mx-0"
@@ -149,7 +149,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="tel:+251"
+                href="tel:+251911662934"
                 className="bg-gray-900 text-white px-8 py-3 font-medium hover:bg-gray-800 transition-colors inline-flex items-center justify-center border border-gray-900"
               >
                 Call Now
