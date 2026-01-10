@@ -3,6 +3,7 @@ import { Footer } from '@/components/footer';
 
 export default function ContactPage() {
   const mapDirectionsUrl = "https://goo.gl/maps/VxbhWkrEUayvswZL7";
+  const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3955.3386831193543!2d37.853112075002414!3d7.537991992475343!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zN8KwMzInMTYuOCJOIDM3wrA1MScyMC41IkU!5e0!3m2!1sen!2set!4v1768083428377!5m2!1sen!2set";
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -152,23 +153,17 @@ export default function ContactPage() {
               <div>
                 <h2 className="text-2xl font-light text-gray-900 mb-6 tracking-tight">Find Us</h2>
                 <div className="border border-gray-200 overflow-hidden rounded">
-                  <a
-                    href={mapDirectionsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full h-[500px] bg-gray-100 relative group"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center">
-                      <div className="text-center p-8">
-                        <div className="text-6xl mb-4">📍</div>
-                        <h3 className="text-xl font-medium text-gray-900 mb-2">Leyuwork Pharmacy</h3>
-                        <p className="text-gray-600 mb-4">Hossana, Ethiopia</p>
-                        <div className="bg-white px-6 py-3 rounded-md shadow-md inline-block group-hover:shadow-lg transition-shadow">
-                          <span className="text-primary-600 font-medium">Click to view on Google Maps →</span>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
+                  <iframe
+                    src={mapEmbedUrl}
+                    width="100%"
+                    height="500"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="w-full"
+                    title="Leyuwork Pharmacy Location"
+                  ></iframe>
                 </div>
                 <p className="text-xs text-gray-500 mt-4 text-center">
                   <a
