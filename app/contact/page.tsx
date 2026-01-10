@@ -47,9 +47,6 @@ export default function ContactPage() {
                     <p className="text-gray-600">
                       Hossana, Ethiopia
                     </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Next to XYZ Building
-                    </p>
                   </div>
 
                   {/* Phone */}
