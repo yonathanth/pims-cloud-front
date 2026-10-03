@@ -2,6 +2,9 @@ import axios, { AxiosInstance, AxiosError } from 'axios';
 import { LoginRequest, LoginResponse, AnalyticsSnapshot, LastUpdated } from '@/types/analytics';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.leyuworkpharmacy.com.et/api';
+// Request paths below already start with /api, so drop a trailing /api from the
+// configured URL (same as lib/api/analytics.ts); works with or without it
+const BASE_URL = API_URL.replace(/\/$/, '').replace(/\/api$/, '');
 
 // Debug: Log the API URL being used
 console.log('🔗 API URL:', API_URL);
@@ -11,7 +14,7 @@ class ApiClient {
 
   constructor() {
     this.client = axios.create({
-      baseURL: API_URL,
+      baseURL: BASE_URL,
       headers: {
         'Content-Type': 'application/json',
       },

@@ -45,13 +45,31 @@ export function AnalyticsTabs({ data }: AnalyticsTabsProps) {
         <TabPanel>
           <div className="analytics-tab-content">
             <MetricsCards metrics={data.metrics || []} />
+            {/* Same for every period: rolling window, combined per product.
+                Missing until the pharmacy app is updated. */}
+            {Array.isArray(data.fast_moving_products_30d) && (
+              <>
+                <ProductsTable
+                  title={`Fast Moving Products (last ${data.moving_window_days ?? 30} days)`}
+                  products={data.fast_moving_products_30d}
+                  soldHeader="Sold"
+                />
+                <ProductsTable
+                  title={`Slow Moving Products (last ${data.moving_window_days ?? 30} days)`}
+                  products={data.slow_moving_products_30d || []}
+                  soldHeader="Sold"
+                />
+              </>
+            )}
             <ProductsTable
-              title="Fast Moving Products"
+              title="Fast Moving Products (selected period)"
               products={data.fast_moving_products || []}
+              soldHeader="Sold"
             />
             <ProductsTable
-              title="Slow Moving Products"
+              title="Slow Moving Products (selected period)"
               products={data.slow_moving_products || []}
+              soldHeader="Sold"
             />
           </div>
         </TabPanel>

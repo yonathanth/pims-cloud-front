@@ -1,13 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api/client';
 import { setAuthToken, setAuthUser, removeAuthToken, getAuthUser } from '@/lib/auth/auth';
 import { LoginRequest } from '@/types/analytics';
 
+// Where to go after login: the page the middleware sent us away from
+// (?redirect=/sales), if it's a path on this site; otherwise analytics
+function getPostLoginPath(): string {
+  const target = new URLSearchParams(window.location.search).get('redirect');
+  return target && target.startsWith('/') && !target.startsWith('//')
+    ? target
+    : '/analytics';
+}
+
 export function useAuth() {
-  const router = useRouter();
   const [user, setUser] = useState<{ id: number; username: string; fullName?: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -27,8 +34,11 @@ export function useAuth() {
       setAuthUser(response.user);
       setUser(response.user);
       
-      console.log('✅ Token stored, redirecting to analytics...');
-      router.push('/analytics');
+      // Full page load, not router.push: the client router may have cached the
+      // middleware's "no cookie, go to /login" redirect for /analytics, which
+      // left the login page stuck until a manual reload
+      console.log('✅ Token stored, redirecting...');
+      window.location.replace(getPostLoginPath());
     } catch (error: any) {
       console.error('❌ Login failed:', error);
       console.error('❌ Error response:', error.response?.data);
@@ -39,7 +49,8 @@ export function useAuth() {
   const logout = () => {
     removeAuthToken();
     setUser(null);
-    router.push('/login');
+    // Full page load so no cached, logged-in page is shown again
+    window.location.replace('/login');
   };
 
   return {

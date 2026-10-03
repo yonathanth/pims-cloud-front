@@ -11,19 +11,45 @@ import {
   HeaderGlobalBar,
   HeaderGlobalAction,
   HeaderMenuButton,
+  ToastNotification,
 } from '@carbon/react';
 import {
   Dashboard,
   Logout,
   UserAvatar,
   ChartLine,
+  Notification,
+  NotificationOff,
 } from '@carbon/icons-react';
 import { AccountSettingsModal } from './account-settings-modal';
+import { usePushNotifications } from '@/hooks/use-push-notifications';
+
+const PUSH_HELP: Record<string, string> = {
+  unsupported:
+    'This browser cannot receive notifications. On iPhone, add this site to your Home Screen first, then open it from there.',
+  denied:
+    'Notifications are blocked for this site. Allow them in your browser settings, then try again.',
+};
 
 export function Sidebar() {
   const { user, logout } = useAuth();
   const [isSideNavExpanded, setIsSideNavExpanded] = useState(false); // Start collapsed
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+  const push = usePushNotifications();
+  const [pushMessage, setPushMessage] = useState<string | null>(null);
+
+  const handlePushClick = async () => {
+    if (push.state === 'unsupported' || push.state === 'denied') {
+      setPushMessage(PUSH_HELP[push.state]);
+    } else if (push.state === 'on') {
+      await push.disable();
+      setPushMessage('Sale notifications are off on this device.');
+    } else if (push.state === 'off') {
+      if (await push.enable()) {
+        setPushMessage('Sale notifications are on. A test notification was sent to this device.');
+      }
+    }
+  };
 
   // Initialize sidebar state - expanded on desktop, collapsed on mobile
   useEffect(() => {
@@ -83,6 +109,20 @@ export function Sidebar() {
         </HeaderName>
         <HeaderGlobalBar>
           <HeaderGlobalAction
+            aria-label={
+              push.state === 'on'
+                ? 'Sale notifications on (click to turn off)'
+                : 'Turn on sale notifications'
+            }
+            onClick={() => {
+              if (push.state !== 'loading' && !push.busy) void handlePushClick();
+            }}
+            isActive={push.state === 'on'}
+            tooltipAlignment="end"
+          >
+            {push.state === 'on' ? <Notification size={20} /> : <NotificationOff size={20} />}
+          </HeaderGlobalAction>
+          <HeaderGlobalAction
             aria-label="Account Settings"
             onClick={() => setIsAccountModalOpen(true)}
             tooltipAlignment="end"
@@ -124,6 +164,21 @@ export function Sidebar() {
         </SideNavItems>
       </SideNav>
       
+      {(pushMessage || push.error) && (
+        <div style={{ position: 'fixed', top: '3.5rem', right: '1rem', zIndex: 9000 }}>
+          <ToastNotification
+            kind={push.error ? 'error' : 'info'}
+            title="Notifications"
+            subtitle={push.error || pushMessage || ''}
+            timeout={8000}
+            onClose={() => {
+              setPushMessage(null);
+              push.clearError();
+            }}
+          />
+        </div>
+      )}
+
       <AccountSettingsModal
         isOpen={isAccountModalOpen}
         onClose={() => setIsAccountModalOpen(false)}

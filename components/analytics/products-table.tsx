@@ -6,13 +6,16 @@ import { Tile, DataTable, TableContainer, Table, TableHead, TableRow, TableHeade
 interface ProductsTableProps {
   products?: Product[];
   title: string;
+  // Adds a column with units sold (fast/slow movers)
+  soldHeader?: string;
 }
 
-export function ProductsTable({ products = [], title }: ProductsTableProps) {
+export function ProductsTable({ products = [], title, soldHeader }: ProductsTableProps) {
   const headers = [
     { key: 'product', header: 'Product' },
     { key: 'sku', header: 'SKU' },
-    { key: 'quantity', header: 'Quantity' },
+    ...(soldHeader ? [{ key: 'sold', header: soldHeader }] : []),
+    { key: 'quantity', header: soldHeader ? 'In Stock' : 'Quantity' },
     { key: 'unitPrice', header: 'Unit Price' },
   ];
 
@@ -51,6 +54,7 @@ export function ProductsTable({ products = [], title }: ProductsTableProps) {
       product: productName,
       sku: p.sku || '-',
       quantity: p.quantity ?? 0,
+      sold: p.sold_qty ?? p.orderedQty ?? '-',
       unitPrice: `ETB ${unitPrice.toFixed(2)}`,
     };
   });

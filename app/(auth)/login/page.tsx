@@ -1,12 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { getAuthToken } from '@/lib/auth/auth';
 
 export default function LoginPage() {
-  const router = useRouter();
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,11 +12,11 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Redirect if already authenticated
+    // Redirect if already authenticated (full load, see useAuth().login)
     if (getAuthToken()) {
-      router.push('/analytics');
+      window.location.replace('/analytics');
     }
-  }, [router]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
